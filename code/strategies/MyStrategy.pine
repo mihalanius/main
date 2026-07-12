@@ -1,0 +1,30 @@
+//@version=6
+strategy(
+     title = "My Strategy",
+     shorttitle = "MyStrategy",
+     overlay = true,
+     initial_capital = 10000,
+     pyramiding = 0,
+     commission_type = strategy.commission.percent,
+     commission_value = 0.05
+)
+
+// === INPUTS ===
+emaLength = input.int(200, "EMA Length", minval = 1)
+
+// === CALCULATIONS ===
+ema200 = ta.ema(close, emaLength)
+
+// === PLOTS ===
+plot(ema200, title = "EMA 200", linewidth = 2)
+
+// === ENTRY CONDITIONS ===
+longCondition = ta.crossover(close, ema200)
+shortCondition = ta.crossunder(close, ema200)
+
+// === ORDERS ===
+if longCondition
+    strategy.entry("Long", strategy.long)
+
+if shortCondition
+    strategy.entry("Short", strategy.short)
